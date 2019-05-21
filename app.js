@@ -14,9 +14,7 @@ db.once('open', function () {
 app.engine('handlebars', exphbs())
 app.set('view engine', 'handlebars')
 
-app.get('/', (req, res) => {
-  res.render('home')
-})
+app.use('/', require('./routes/home'))
 
 app.listen(port, () => {
   console.log(`Express is runnig on ${port}`)
