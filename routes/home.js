@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/new', async (req, res) => {
-  const hostUrl = req.headers.host
+  const baseUrl = `${req.protocol}://${req.headers.host}/`
   const newOriginalUrl = req.body.originalUrl
   //驗證URL是否為真
 
@@ -17,7 +17,7 @@ router.post('/new', async (req, res) => {
   //是否為重複的URL，如果是，直接給過去的 shortId
   const exitShortId = await findOriginalUrlInDataBaseAndReturnShortId(newOriginalUrl)
   if (exitShortId) {
-    res.render('home', { hostUrl, exitShortId })
+    res.render('home', { baseUrl, exitShortId })
   } else {
     const newShortId = await generateUniqueShortId()
     const newUrlShorten = new UrlShorten({
@@ -26,15 +26,33 @@ router.post('/new', async (req, res) => {
       createdAt: moment().tz('Asia/Taipei').format('YYYY-MM-DD')
     })
     await newUrlShorten.save()
-    res.render('home', { hostUrl, newShortId })
+    res.render('home', { baseUrl, newShortId })
   }
 })
 
-router.get('/:shortId', (req, res) => {
-  res.send('導向某網址')
+router.get('/:shortId', async (req, res) => {
+  const shortId = req.params.shortId
+  const originalUrl = await findOriginalUrlByShortIdAndReturnExitOriginalUrl(shortId)
+  if (originalUrl) {
+    res.redirect(originalUrl)
+  } else {
+    const baseUrl = `${req.protocol}://${req.headers.host}/`
+    res.render('not-found', { baseUrl })
+  }
 })
 
 module.exports = router
+
+async function findOriginalUrlByShortIdAndReturnExitOriginalUrl(shortId) {
+  const urlShorten = await UrlShorten.findOne({ shortId }).exec()
+  if (urlShorten) {
+    return urlShorten.originalUrl
+  } else {
+    return null
+  }
+
+}
+
 async function findOriginalUrlInDataBaseAndReturnShortId(newOriginalUrl) {
   const exitOriginalUrl = await UrlShorten.findOne({ originalUrl: newOriginalUrl }).exec()
   if (exitOriginalUrl) {
