@@ -1,12 +1,15 @@
 const express = require('express')
 const router = express.Router()
 const UrlShorten = require('../models/url-shorten')
+const moment = require('moment')
+const tz = require('moment-timezone')
 
 router.get('/', (req, res) => {
   res.render('home')
 })
 
 router.post('/new', async (req, res) => {
+  const hostUrl = req.headers.host
   const newOriginalUrl = req.body.originalUrl
   //驗證URL是否為真
 
@@ -14,20 +17,17 @@ router.post('/new', async (req, res) => {
   //是否為重複的URL，如果是，直接給過去的 shortId
   const exitShortId = await findOriginalUrlInDataBaseAndReturnShortId(newOriginalUrl)
   if (exitShortId) {
-    res.render('home', { exitShortId })
+    res.render('home', { hostUrl, exitShortId })
   } else {
     const newShortId = await generateUniqueShortId()
     const newUrlShorten = new UrlShorten({
       originalUrl: newOriginalUrl,
       shortId: newShortId,
-      createdAt: 'now'
+      createdAt: moment().tz('Asia/Taipei').format('YYYY-MM-DD')
     })
-    newUrlShorten.save()
-      .then(
-        res.render('home', { newShortId })
-      )
+    await newUrlShorten.save()
+    res.render('home', { hostUrl, newShortId })
   }
-
 })
 
 router.get('/:shortId', (req, res) => {
