@@ -8,12 +8,25 @@ router.get('/', (req, res) => {
 
 router.post('/new', async (req, res) => {
   const newOriginalUrl = req.body.originalUrl
-  const newShortId = await generateUniqueShortId()
   //驗證URL是否為真
 
   //存入DB
-  //是否為重複的URL
-  //
+  //是否為重複的URL，如果是，直接給過去的 shortId
+  const exitShortId = await findOriginalUrlInDataBaseAndReturnShortId(newOriginalUrl)
+  if (exitShortId) {
+    res.render('home', { exitShortId })
+  } else {
+    const newShortId = await generateUniqueShortId()
+    const newUrlShorten = new UrlShorten({
+      originalUrl: newOriginalUrl,
+      shortId: newShortId,
+      createdAt: 'now'
+    })
+    newUrlShorten.save()
+      .then(
+        res.render('home', { newShortId })
+      )
+  }
 
 })
 
@@ -22,6 +35,14 @@ router.get('/:shortId', (req, res) => {
 })
 
 module.exports = router
+async function findOriginalUrlInDataBaseAndReturnShortId(newOriginalUrl) {
+  const exitOriginalUrl = await UrlShorten.findOne({ originalUrl: newOriginalUrl }).exec()
+  if (exitOriginalUrl) {
+    return exitOriginalUrl.shortId
+  } else {
+    return null
+  }
+}
 
 async function generateUniqueShortId() {
   let isShortIdDuplicate = true
