@@ -6,7 +6,11 @@ router.get('/', (req, res) => {
 })
 
 router.post('/new', (req, res) => {
-  console.log('存入新網址')
+  console.log(req.body)
+  //驗證URL
+
+  //存入DB
+
 })
 
 router.get('/:shortId', (req, res) => {

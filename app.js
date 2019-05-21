@@ -3,6 +3,8 @@ const app = express()
 const port = 3000
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
+
 
 mongoose.connect('mongodb://localhost/urlShortener', { useNewUrlParser: true })
 const db = mongoose.connection
@@ -13,6 +15,8 @@ db.once('open', function () {
 
 app.engine('handlebars', exphbs())
 app.set('view engine', 'handlebars')
+
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use('/', require('./routes/home'))
 
