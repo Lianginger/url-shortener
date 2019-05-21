@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 
-
+mongoose.set('debug', true)
 mongoose.connect('mongodb://localhost/urlShortener', { useNewUrlParser: true })
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))

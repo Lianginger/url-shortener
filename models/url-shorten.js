@@ -6,4 +6,4 @@ var urlShortenSchema = new mongoose.Schema({
   createdAt: String
 })
 
-module.exports = mongoose.model('UrlShorten', urlShortenSchema);
+module.exports = mongoose.model('UrlShorten', urlShortenSchema)
