@@ -1,7 +1,11 @@
-<h1>URL Shortener</h1>
+<h1 class="text-center">URL Shortener</h1>
+<div>Icons made by <a href="https://www.flaticon.com/authors/chanut" title="Chanut">Chanut</a> from <a
+    href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a
+    href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+</div>
 <form action="/new" method="post" id="shortener-form">
   <input type="url" name="originalUrl" id="original-url-input" value="{{{newOriginalUrl}}}">
-  <button type="submit">SHORTEN!!!</button>
+  <button type="submit" class="btn btn-outline-dark">SHORTEN!!!</button>
 </form>
 <div id="error-message">{{{errorMessage}}}</div>
 <div id="display-shortURL">
@@ -10,6 +14,7 @@
 </div>
 
 <script>
+  //若使用者沒有輸入內容，就按下了送出鈕，需要防止表單送出並提示使用者
   const shortenerForm = document.querySelector('#shortener-form')
   const originalUrlInput = document.querySelector('#original-url-input')
   const errorMessage = document.querySelector('#error-message')

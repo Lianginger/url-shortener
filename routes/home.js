@@ -20,7 +20,7 @@ router.post('/new', async (req, res) => {
     await isSiteExit(validUrl)
 
     //存入DB
-    //是否為重複的URL，如果是，直接給過去的 shortId
+    //防止有重覆的網址組合出現，重複的 URL 給過去的 shortId
     const exitShortId = await findOriginalUrlInDataBaseAndReturnShortId(newOriginalUrl)
     if (exitShortId) {
       res.render('home', { baseUrl, exitShortId })
