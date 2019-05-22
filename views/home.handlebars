@@ -1,19 +1,22 @@
 <h1>URL Shortener</h1>
 <form action="/new" method="post" id="shortener-form">
-  <input type="url" name="originalUrl" id="original-url-input">
+  <input type="url" name="originalUrl" id="original-url-input" value="{{{newOriginalUrl}}}">
   <button type="submit">SHORTEN!!!</button>
 </form>
+<div id="error-message">{{{errorMessage}}}</div>
 <div id="display-shortURL">
-  <a
-    target="_blank" rel="noopener noreferrer" href="/{{{exitShortId}}}{{{newShortId}}}">{{{baseUrl}}}{{{exitShortId}}}{{{newShortId}}}</a>
+  <a target="_blank" rel="noopener noreferrer"
+    href="/{{{exitShortId}}}{{{newShortId}}}">{{{baseUrl}}}{{{exitShortId}}}{{{newShortId}}}</a>
 </div>
 
 <script>
   const shortenerForm = document.querySelector('#shortener-form')
   const originalUrlInput = document.querySelector('#original-url-input')
-  shortenerForm.addEventListener('submit',event => {
-    if(originalUrlInput.value === ''){
+  const errorMessage = document.querySelector('#error-message')
+  shortenerForm.addEventListener('submit', event => {
+    if (originalUrlInput.value === '') {
       event.preventDefault()
+      errorMessage.innerHTML = '快來輸入長長的網址吧！'
     }
   })
 </script>
