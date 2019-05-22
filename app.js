@@ -6,7 +6,7 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 
 mongoose.set('debug', true)
-mongoose.connect('mongodb://localhost/urlShortener', { useNewUrlParser: true })
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/urlShortener', { useNewUrlParser: true })
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))
 db.once('open', function () {
@@ -21,6 +21,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use('/', require('./routes/home'))
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
   console.log(`Express is runnig on ${port}`)
 })
