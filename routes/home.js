@@ -36,7 +36,7 @@ router.post('/new', async (req, res) => {
     }
 
   } catch (err) {
-    const errorMessage = '錯誤的網址！請確定網址是否正確'
+    const errorMessage = '無效的網址！請確定網址是否正確'
     res.render('home', { errorMessage, newOriginalUrl })
   }
 })
