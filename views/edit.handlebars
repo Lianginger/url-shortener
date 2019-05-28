@@ -1,0 +1,12 @@
+<h1>Edit page</h1>
+<form action="/edit/{{urlShorten.shortId}}" method="post">
+  <div id="link-image"
+    style="background-image: url({{urlShorten.ogimage}}); width:600px; height: 314px;background-size: cover;background-position: center;background-repeat: no-repeat;">
+  </div>
+  <input type="text" name="ogimage" value="{{urlShorten.ogimage}}">
+  <div id="link-desc">
+    <textarea name="ogtitle" id="link-title" rows="2">{{urlShorten.ogtitle}}</textarea>
+    <textarea name="ogdescription" id="link-description" rows="2">{{urlShorten.ogdescription}}</textarea>
+  </div>
+  <button type="submit">完成</button>
+</form>

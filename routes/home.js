@@ -43,9 +43,35 @@ router.post('/new', async (req, res) => {
 
 router.get('/:shortId', async (req, res) => {
   const shortId = req.params.shortId
-  const originalUrl = await findOriginalUrlByShortIdAndReturnExitOriginalUrl(shortId)
+  const urlShorten = await findOriginalUrlByShortIdAndReturnExistOriginalUrlObject(shortId)
+  const originalUrl = urlShorten.originalUrl
   if (originalUrl) {
-    res.redirect(originalUrl)
+    res.render('transfer', { layout: false, originalUrl })
+    // res.redirect(originalUrl)
+  } else {
+    const baseUrl = `${req.protocol}://${req.headers.host}/`
+    res.render('not-found', { baseUrl })
+  }
+})
+
+router.get('/edit/:shortId', async (req, res) => {
+  const shortId = req.params.shortId
+  const urlShorten = await findOriginalUrlByShortIdAndReturnExistOriginalUrlObject(shortId)
+  if (urlShorten) {
+    res.render('edit', { urlShorten })
+  } else {
+    const baseUrl = `${req.protocol}://${req.headers.host}/`
+    res.render('not-found', { baseUrl })
+  }
+})
+
+router.post('/edit/:shortId', async (req, res) => {
+  const shortId = req.params.shortId
+  const urlShorten = await findOriginalUrlByShortIdAndReturnExistOriginalUrlObject(shortId)
+  Object.assign(urlShorten, req.body)
+  urlShorten.save()
+  if (urlShorten) {
+    res.render('edit', { urlShorten })
   } else {
     const baseUrl = `${req.protocol}://${req.headers.host}/`
     res.render('not-found', { baseUrl })
@@ -65,10 +91,10 @@ function isSiteExist(validUrl) {
   })
 }
 
-async function findOriginalUrlByShortIdAndReturnExitOriginalUrl(shortId) {
+async function findOriginalUrlByShortIdAndReturnExistOriginalUrlObject(shortId) {
   const urlShorten = await UrlShorten.findOne({ shortId }).exec()
   if (urlShorten) {
-    return urlShorten.originalUrl
+    return urlShorten
   } else {
     return null
   }
