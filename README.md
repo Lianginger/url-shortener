@@ -2,7 +2,7 @@
 這是一個使用 Express + MongoDB 打造的縮短網址服務。  
 👉 [Demo website](https://cool-url-shortener.herokuapp.com/)  
 
-![畫面截圖](https://github.com/Lianginger/url-shortener/blob/master/cool-rul-shortener.png)
+![畫面截圖](https://github.com/Lianginger/url-shortener/blob/master/public/image/cool-rul-shortener.png)
 
 # 功能：
 - 短網址輸出格式為 5 碼英數組合

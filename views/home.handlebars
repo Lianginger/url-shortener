@@ -1,4 +1,4 @@
-<h1 class="text-center m-5">URL Shortener</h1>
+<h1 class="text-center m-5">Cool URL Shortener</h1>
 <div class="row">
   <div class="col-3 m-auto">
     <img src="/image/logo.svg" alt="logo">
@@ -32,14 +32,20 @@
         <button type="submit" class="btn btn-outline-dark">SHORTEN!!!</button>
       </div>
     </form>
-    <div class="m-3" id="display-shortURL">
+    <div class="m-3 position-relative" id="display-shortURL">
       {{#if baseUrl}}
-      <div class="alert alert-success" role="alert" id="error-message">
-        <p>Link shortening successful!</p>
-        <span>Visit your website at </span>
+      <div class="alert alert-success" role="alert">
+        <p class="m-0">縮短網址成功！</p>
         <a target="_blank" rel="noopener noreferrer"
           href="/{{{exitShortId}}}{{{newShortId}}}">{{{baseUrl}}}{{{exitShortId}}}{{{newShortId}}}</a>
+        <div class="my-1">
+          <button onclick="copyLink()" class="btn btn-outline-success btn-sm">複製連結</button>
+          <span class="text-success" id="copy-link-text-hint"></span>
+        </div>
+
       </div>
+      <input type="text" class="position-absolute" id="shorten-url-link"
+        value="{{{baseUrl}}}{{{exitShortId}}}{{{newShortId}}}" style="top:1px; left: 1px; z-index: -100">
       {{/if}}
     </div>
   </div>
@@ -59,4 +65,13 @@
       hintMessage.innerHTML = '快來輸入長長的網址吧！'
     }
   })
+
+  function copyLink() {
+    console.log('aaaa')
+    const shortenUrlLink = document.querySelector('#shorten-url-link')
+    const copyLinkTextHint = document.querySelector('#copy-link-text-hint')
+    shortenUrlLink.select()
+    document.execCommand('copy')
+    copyLinkTextHint.innerHTML = `已複製連結！`
+  }
 </script>

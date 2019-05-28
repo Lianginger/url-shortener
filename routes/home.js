@@ -17,7 +17,7 @@ router.post('/new', async (req, res) => {
     //驗證URL
     let validUrl
     validUrl = new URL(newOriginalUrl)
-    await isSiteExit(validUrl)
+    await isSiteExist(validUrl)
 
     //存入DB
     //防止有重覆的網址組合出現，重複的 URL 給過去的 shortId
@@ -54,7 +54,7 @@ router.get('/:shortId', async (req, res) => {
 
 module.exports = router
 
-function isSiteExit(validUrl) {
+function isSiteExist(validUrl) {
   return new Promise((resolve, reject) => {
     dns.lookup(validUrl.hostname, err => {
       if (err) {
